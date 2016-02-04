@@ -2,9 +2,7 @@
 
 Simple API for executing CRUD operations on Todo.
 
-Extension of the work made by https://github.com/corylanou with the tutorial
- 
-https://thenewstack.io/make-a-restful-json-api-go/
+Extension of https://github.com/corylanou/tns-restful-json-api made by https://github.com/corylanou
 
 Added unit test using [Ginkgo](http://onsi.github.io/ginkgo/) and [Gomega](http://onsi.github.io/gomega/)
 
