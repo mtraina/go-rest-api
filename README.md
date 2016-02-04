@@ -24,13 +24,13 @@ $GOPATH/bin/go-rest-api
 
 ## Commands
 
-### Get all the todos
+#### Get all the todos
 curl localhost:8080/todos
 
-### Get single todo
+#### Get single todo
 curl localhost:8080/todos/{todoId}
 
-### Create a todo
+#### Create a todo
 curl -H "Content-Type: application/json;charset=UTF-8" -XPOST localhost:8080/todos -d '
 {
     "name": "Testing Go",
