@@ -25,11 +25,16 @@ $GOPATH/bin/go-rest-api
 ## Commands
 
 #### Get all the todos
+```shell
 curl localhost:8080/todos
+```
 
 #### Get single todo
+```shell
 curl localhost:8080/todos/{todoId}
+```
 
+```shell
 #### Create a todo
 curl -H "Content-Type: application/json;charset=UTF-8" -XPOST localhost:8080/todos -d '
 {
@@ -37,3 +42,4 @@ curl -H "Content-Type: application/json;charset=UTF-8" -XPOST localhost:8080/tod
     "completed":true,
     "due": "2016-02-03T00:00:00Z"
 }'
+```
