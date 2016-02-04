@@ -25,13 +25,14 @@ var _ = Describe("Handlers", func() {
 		Context("Plain", func() {
 			It("should return 2 todos", func() {
 				r, err := http.NewRequest("GET", "/", nil)
-				Expect(err).NotTo(HaveOccurred())
+				Ω(err).NotTo(HaveOccurred())
 
 				TodoIndex(w, r)
 
 				var ts Todos
 				err = json.NewDecoder(w.Body).Decode(&ts)
 
+				Ω(len(ts)).To(BeEquivalentTo(2))
 				fmt.Printf("the returned body is {}", ts)
 			})
 		})
