@@ -34,8 +34,8 @@ curl localhost:8080/todos
 curl localhost:8080/todos/{todoId}
 ```
 
-```shell
 #### Create a todo
+```shell
 curl -H "Content-Type: application/json;charset=UTF-8" -XPOST localhost:8080/todos -d '
 {
     "name": "Testing Go",
