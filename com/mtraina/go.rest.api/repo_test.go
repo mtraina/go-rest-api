@@ -13,7 +13,7 @@ func TestRepoFindTodo(t *testing.T){
 }
 
 func TestGetNilTodoWithNotExpectedId(t *testing.T){
-	todo := RepoFindTodo(3)
+	todo := RepoFindTodo(999)
 
 	if todo.Id != 0 {
 		t.Error("expected todo with id 0, got one with id  ", todo.Id)
@@ -29,7 +29,7 @@ func TestDestroyExistingTodo(t *testing.T){
 }
 
 func TestDestroyNonExistingTodo(t *testing.T){
-	err := RepoDestroyTodo(3)
+	err := RepoDestroyTodo(999)
 
 	if err == nil {
 		t.Errorf("destroying a non existing todo should generate an error")
