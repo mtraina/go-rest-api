@@ -42,8 +42,7 @@ func TodoCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.Unmarshal(body, &todo); err != nil {
-		w.Header().Set("Content-Type", "application/json;charset=UTF-8")
-		w.WriteHeader(422)	// set the status code to unprocessable entity
+		jsonContentTypeHeader(w).WriteHeader(422)	// set the status code to unprocessable entity
 		if err := json.NewEncoder(w).Encode(err); err != nil {
 			panic(err)
 		}
@@ -52,13 +51,13 @@ func TodoCreate(w http.ResponseWriter, r *http.Request) {
 	t := RepoCreateTodo(todo)
 
 	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
-	w.WriteHeader(http.StatusCreated)
+	jsonContentTypeHeader(w).WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(t); err != nil {
 		panic(err)
 	}
 }
 
-func setJsonContentTypeHeader(w http.ResponseWriter) http.ResponseWriter {
+func jsonContentTypeHeader(w http.ResponseWriter) http.ResponseWriter {
 	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 	return w
 }
