@@ -26,13 +26,13 @@ func init(){
 		//return nil
 		b, err := tx.CreateBucket([]byte("todos"))
 		if err != nil {
-			log.Fatalf("error! %s", err)
+			log.Fatalf("create bucket error %v", err)
 			return err
 		}
 		return b.Put([]byte("1"), []byte("Write presentation"))
 	})
 	if err != nil {
-		log.Fatalf("error %s", err)
+		log.Fatalf("update error %v", err)
 	}
 }
 
@@ -41,13 +41,17 @@ func FindTodo() string {
 
 	var todo string
 
-	db.View(func(tx *bolt.Tx) error {
+	err := db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("todo"))
 		v := b.Get([]byte("1"))
 		fmt.Printf("The todo is: %s\n", v)
 		todo = string(v[:])
 		return nil
 	})
+
+	if err != nil {
+		log.Fatalf("find todo error %v", err)
+	}
 
 	return todo
 }

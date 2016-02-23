@@ -29,12 +29,14 @@ var _ = Describe("Repository", func() {
 
 			log.Print("bucket deleted")
 
-			log.Printf("err %s", err)
+			if err != nil {
+				log.Printf("delete bucket error %v", err)
+			}
 
 			Ω(err).NotTo(HaveOccurred())
 
 			if err != nil {
-				return fmt.Errorf("delete bucket: %s", err)
+				return fmt.Errorf("delete bucket: %v", err)
 			}
 			return nil
 		})
@@ -51,11 +53,11 @@ var _ = Describe("Repository", func() {
 
 				//Ω(err).NotTo(HaveOccurred())
 
-				//FindTodo()
+				todo := FindTodo()
 
-				Ω(1).Should(Equal(1))
+				Ω(todo).Should(Equal("Write presentation"))
 
-				//Ω(todo).To(BeEquivalentTo("Write presentationww"))
+				//Ω(1).To(BeEquivalentTo(1))
 			})
 		})
 	})
