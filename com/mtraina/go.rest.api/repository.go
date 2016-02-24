@@ -12,6 +12,8 @@ var (
 	bucketName string = "todos"
 )
 
+type Execute func(db *bolt.DB) []byte
+
 func init(){
 	fmt.Print("start!")
 
@@ -39,22 +41,39 @@ func init(){
 func FindTodo() string {
 	log.Print("find todo")
 
+	v := exe(selectTodo)
+	log.Printf("value is %v", v)
+	return v
+}
+
+func selectTodo(db *bolt.DB) []byte {
+	var todo []byte
+
+	err := db.View(func(tx *bolt.Tx) error {
+		log.Print("get bucket")
+		b := tx.Bucket([]byte(bucketName))
+		todo = b.Get([]byte("1"))
+		log.Print("got value")
+		//todo = string(v[:])
+		return nil
+	})
+
+	if err != nil {
+		log.Fatalf("error on get %v", err)
+	}
+
+	return todo
+}
+
+func exe(fn Execute) string {
 	db, err := bolt.Open(dbName, 0600, &bolt.Options{Timeout: 1 * time.Second, ReadOnly: true})
 	if err != nil {
 		log.Printf("error opening db %v", err)
 	}
 	defer db.Close()
-
-	var todo string
-
-	err = db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte(bucketName))
-		v := b.Get([]byte("1"))
-		todo = string(v[:])
-		return nil
-	})
-
-	return todo
+	var r []byte = fn(db)
+	log.Printf("got %v", r)
+	return string(r[:])
 }
 
 
