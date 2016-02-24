@@ -1,29 +1,26 @@
 package main
 
 import (
-	//"testing"
 	"github.com/boltdb/bolt"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-	//"time"
-	"testing"
 	"log"
 	"time"
+
+	"testing"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Repository", func() {
 
 	AfterEach(func() {
-		log.Print("before")
+		log.Print("after test")
 
 		db, err := bolt.Open(dbName, 0600, &bolt.Options{Timeout: 1 * time.Second})
 		Ω(err).NotTo(HaveOccurred())
 
 		err = db.Update(func(tx *bolt.Tx) error {
 			log.Print("delete bucket")
-
 			err := tx.DeleteBucket([]byte(bucketName))
-
 			log.Print("bucket deleted")
 
 			if err != nil {
@@ -31,11 +28,10 @@ var _ = Describe("Repository", func() {
 			}
 
 			Ω(err).NotTo(HaveOccurred())
-
 			return nil
 		})
 
-		log.Print("after delete")
+		log.Print("after delete bucket")
 		Ω(err).NotTo(HaveOccurred())
 	})
 
@@ -43,15 +39,8 @@ var _ = Describe("Repository", func() {
 		Context("Get string", func() {
 
 			It("should return a string", func() {
-				//db, err := bolt.Open(dbName, 0600, &bolt.Options{Timeout: 1 * time.Second})
-
-				//Ω(err).NotTo(HaveOccurred())
-
 				todo := FindTodo()
-
 				Ω(todo).Should(Equal("Write presentation"))
-
-				//Ω(1).To(BeEquivalentTo(1))
 			})
 		})
 	})

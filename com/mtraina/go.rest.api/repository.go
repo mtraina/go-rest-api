@@ -37,7 +37,7 @@ func init(){
 }
 
 func FindTodo() string {
-	log.Print("find")
+	log.Print("find todo")
 
 	db, err := bolt.Open(dbName, 0600, &bolt.Options{Timeout: 1 * time.Second, ReadOnly: true})
 	if err != nil {
@@ -48,25 +48,11 @@ func FindTodo() string {
 	var todo string
 
 	err = db.View(func(tx *bolt.Tx) error {
-
-		log.Print("open bucket")
 		b := tx.Bucket([]byte(bucketName))
-		log.Print("bucket opened")
-
 		v := b.Get([]byte("1"))
-		log.Print("got v")
-		//fmt.Printf("The todo is: %s\n", v)
 		todo = string(v[:])
-		log.Print("todo is: %s", todo)
-
 		return nil
 	})
-	//
-	//if err != nil {
-	//	log.Fatalf("find todo error %v", err)
-	//}
-
-	//todo = "Write presentation"
 
 	return todo
 }
