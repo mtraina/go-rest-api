@@ -12,7 +12,11 @@ var (
 	bucketName string = "todos"
 )
 
-type Execute func(db *bolt.DB) []byte
+type Result struct {
+	Data []byte
+}
+
+type DBOperation func(db *bolt.DB) Result
 
 func init(){
 	fmt.Print("start!")
@@ -41,12 +45,11 @@ func init(){
 func FindTodo() string {
 	log.Print("find todo")
 
-	v := exe(selectTodo)
-	log.Printf("value is %v", v)
-	return v
+	v := execute(selectTodo)
+	return string(v.Data[:])
 }
 
-func selectTodo(db *bolt.DB) []byte {
+func selectTodo(db *bolt.DB) Result {
 	var todo []byte
 
 	err := db.View(func(tx *bolt.Tx) error {
@@ -54,7 +57,6 @@ func selectTodo(db *bolt.DB) []byte {
 		b := tx.Bucket([]byte(bucketName))
 		todo = b.Get([]byte("1"))
 		log.Print("got value")
-		//todo = string(v[:])
 		return nil
 	})
 
@@ -62,18 +64,19 @@ func selectTodo(db *bolt.DB) []byte {
 		log.Fatalf("error on get %v", err)
 	}
 
-	return todo
+	r := Result{}
+	r.Data = make([]byte, len(todo))
+	copy(r.Data, todo)
+	return r
 }
 
-func exe(fn Execute) string {
+func execute(fn DBOperation) Result {
 	db, err := bolt.Open(dbName, 0600, &bolt.Options{Timeout: 1 * time.Second, ReadOnly: true})
 	if err != nil {
 		log.Printf("error opening db %v", err)
 	}
 	defer db.Close()
-	var r []byte = fn(db)
-	log.Printf("got %v", r)
-	return string(r[:])
+	return fn(db)
 }
 
 
