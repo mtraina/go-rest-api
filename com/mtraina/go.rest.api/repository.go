@@ -7,15 +7,15 @@ import (
 	"fmt"
 )
 
-//var db *bolt.DB
+var (
+	dbName string = "my.db"
+	bucketName string = "todos"
+)
 
 func init(){
 	fmt.Print("start!")
 
-
-	db, err := bolt.Open("my.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
-	// todo: crap!
-	//db = db2
+	db, err := bolt.Open(dbName, 0600, &bolt.Options{Timeout: 1 * time.Second})
 
 	if err != nil {
 		log.Fatal(err)
@@ -24,7 +24,7 @@ func init(){
 
 	err = db.Update(func(tx *bolt.Tx) error {
 		//return nil
-		b, err := tx.CreateBucket([]byte("todos"))
+		b, err := tx.CreateBucket([]byte(bucketName))
 		if err != nil {
 			log.Fatalf("create bucket error %v", err)
 			return err
@@ -39,35 +39,34 @@ func init(){
 func FindTodo() string {
 	log.Print("find")
 
-	db, err := bolt.Open("my.db", 0600, &bolt.Options{Timeout: 1 * time.Second, ReadOnly: true})
+	db, err := bolt.Open(dbName, 0600, &bolt.Options{Timeout: 1 * time.Second, ReadOnly: true})
 	if err != nil {
 		log.Printf("error opening db %v", err)
 	}
 	defer db.Close()
 
-	//log.Fatalf("db opened")
 	var todo string
 
-	//err = db.View(func(tx *bolt.Tx) error {
-	//
-	//	log.Fatalf("open bucket")
-	//	b := tx.Bucket([]byte("todo"))
-	//	log.Fatalf("bucket opened")
-	//
-	//	v := b.Get([]byte("1"))
-	//	log.Fatalf("got v")
-	//	//fmt.Printf("The todo is: %s\n", v)
-	//	todo = string(v[:])
-	//	log.Fatalf("todo is: %s", todo)
-	//
-	//	return nil
-	//})
+	err = db.View(func(tx *bolt.Tx) error {
+
+		log.Print("open bucket")
+		b := tx.Bucket([]byte(bucketName))
+		log.Print("bucket opened")
+
+		v := b.Get([]byte("1"))
+		log.Print("got v")
+		//fmt.Printf("The todo is: %s\n", v)
+		todo = string(v[:])
+		log.Print("todo is: %s", todo)
+
+		return nil
+	})
 	//
 	//if err != nil {
 	//	log.Fatalf("find todo error %v", err)
 	//}
 
-	todo = "Write presentation"
+	//todo = "Write presentation"
 
 	return todo
 }

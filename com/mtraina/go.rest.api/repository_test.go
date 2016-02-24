@@ -12,8 +12,6 @@ import (
 )
 
 var _ = Describe("Repository", func() {
-	var dbName string = "my.db"
-	var bucketName string = "todos"
 
 	AfterEach(func() {
 		log.Print("before")
