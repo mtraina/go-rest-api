@@ -49,11 +49,11 @@ var _ = Describe("Repository", func() {
 
 				//Ω(err).NotTo(HaveOccurred())
 
-				//todo := FindTodo()
+				todo := FindTodo()
 
-				//Ω(todo).Should(Equal("Write presentation"))
+				Ω(todo).Should(Equal("Write presentation"))
 
-				Ω(1).To(BeEquivalentTo(1))
+				//Ω(1).To(BeEquivalentTo(1))
 			})
 		})
 	})
