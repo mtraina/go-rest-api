@@ -39,14 +39,14 @@ var _ = Describe("Repository", func() {
 		Context("Get string", func() {
 
 			It("should return a string", func() {
-				todo := FindTodo()
+				todo := FindTodo("1")
 				Ω(todo).Should(Equal("Write presentation"))
 			})
 		})
 	})
 })
 
-func TestHandlers2(t *testing.T) {
+func TestRepository(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Handler suite")
+	RunSpecs(t, "Repository suite")
 }
